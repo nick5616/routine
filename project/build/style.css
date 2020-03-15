@@ -1,0 +1,48 @@
+
+.wrapper{
+    text-align: center;
+}
+.routine-holder{
+    margin: 25px;
+    border-radius: 25px;
+    background-color: #e9e9e9;
+    padding: 25px;
+    width: 70vw;
+    min-height: 50vh;
+    display: inline-block;
+}
+.task{
+    border-radius: 15px;
+    background-color: #fafafa;
+    padding: 15px;
+    margin: 1vh;
+}
+h1{
+    text-align: left;
+}
+.upload-button{
+    width: 15vw;
+    height: 10vw;
+    font-size: 5vw;
+    font-weight: 900;
+    border-radius: 30px;
+    border: dashed 5px;
+}
+.content-break{
+    text-align: center;
+}
+.block{
+    display: inline-block;
+}
+
+.description{
+    
+}
+
+.start{
+
+}
+
+.end{
+
+}
