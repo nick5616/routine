@@ -10,7 +10,7 @@
     width: 70vw;
     min-height: 50vh;
     display: inline-block;
-    box-shadow: 0 0 3px #333333;
+    box-shadow: 0 0 3px #222222;
 }
 .custom-tf{
     background-color: #AAAAAA;
@@ -26,14 +26,22 @@
 .custom-btn{
     border:none;
 }
+.custom-tf, .custom-btn{
+    margin: 5px;
+}
 .custom-btn:focus{
     border: 3px fuchsia solid;
 }
-.task, .example-task{
+.task, .current-task{
     border-radius: 15px;
     
     padding: 15px;
     margin: 1vh;
+}
+.current-task{
+    border-radius: 5px;
+    padding: 5px;
+    background-color: #BBBBBB;
 }
 h1, h2, h3, h4, h5, h6{
     text-align: left;
@@ -71,4 +79,5 @@ h1, h2, h3, h4, h5, h6{
     width: 100%;
     height: 100vh;
     background-color: #444444;
+    background-image: url("handh.png");
 }
