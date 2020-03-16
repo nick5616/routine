@@ -1,11 +1,13 @@
-
+body{
+    font-family: 'Verdana', 'Century Gothic';
+}
 .wrapper{
     text-align: center;
 }
 .routine-holder{
     margin: 25px;
     border-radius: 15px;
-    background-color: #666666;
+    background-color: #eee;
     padding: 25px;
     width: 70vw;
     min-height: 50vh;
@@ -13,50 +15,76 @@
     box-shadow: 0 0 3px #222222;
 }
 .custom-tf{
-    background-color: #AAAAAA;
+    background-color: transparent; 
     border: none;
-    border-bottom: fuchsia 1px solid;
+    border-bottom: fuchsia 2px solid;
 
 }
 .custom-tf:focus{
     border: 2px dashed black;
-    border-bottom: fuchsia 2px solid;
+    
     background-color: #CCCCCC;
 }
 .custom-btn{
     border:none;
+    background-color: transparent;
 }
-.custom-tf, .custom-btn{
-    margin: 5px;
+.custom-tf, .custom-btn, .custom-icon-btn{
+    margin-left: 5px;
+    margin-right: 5px;
 }
-.custom-btn:focus{
-    border: 3px fuchsia solid;
+.custom-tf, .custom-btn, .custom-icon-btn, .task, .current-task{
+    outline:none;
 }
+.custom-div-btn:focus{
+    border: 2px dashed black;
+    outline: none;
+}
+.upload-button:focus{
+    border: 5px dashed black;
+    outline: none;
+}
+.custom-icon-btn{
+    width: 1vw;
+}
+.custom-div-btn{
+    display: inline-block;
+    border: 1px solid black;
+    background-color: transparent;
+    border-radius: 5px;
+    /*box-shadow: 0 0 3px #222222;*/
+    padding: 2px 5px;
+}
+
 .task, .current-task{
-    border-radius: 15px;
-    
-    padding: 15px;
+    /*border-radius: 5px;*/
+    padding: 5px;
     margin: 1vh;
+    border: 1px solid black;
+}
+.task:focus, .current-task:focus{
+    border: 2px dashed;
 }
 .current-task{
-    border-radius: 5px;
+    /*border-radius: 5px;*/
     padding: 5px;
     background-color: #BBBBBB;
+    
 }
 h1, h2, h3, h4, h5, h6{
     text-align: left;
+    /*font-family: Verdana, Geneva, Tahoma, sans-serif;*/
+    /*color: fuchsia;*/
 }
 .upload-button{
     width: 15vw;
     height: 10vw;
     font-size: 5vw;
     font-weight: 900;
-    border-radius: 30px;
-    border: dashed 5px;
+    border-radius: 20px;
+    border: #111 solid;
 }
-.upload-button:focus{
-    background-color: fuchsia;
-}
+
 .content-break{
     text-align: center;
 }
@@ -69,11 +97,11 @@ h1, h2, h3, h4, h5, h6{
 }
 
 .start{
-    width: 10%;
+    width: 12%;
 }
 
 .end{
-    width: 10%;
+    width: 12%;
 }
 .background{
     width: 100%;
