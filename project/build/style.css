@@ -1,5 +1,5 @@
 body{
-    font-family: 'Verdana', 'Century Gothic';
+    font-family: 'Century Gothic', 'Lucida Console';
 }
 .wrapper{
     text-align: center;
@@ -14,11 +14,19 @@ body{
     display: inline-block;
     box-shadow: 0 0 3px #222222;
 }
+.heading-tf{
+    background-color: transparent;
+    border:none;
+    font-family: 'Lucida Console';
+    max-width: 10ch;
+}
 .custom-tf{
     background-color: transparent; 
     border: none;
-    border-bottom: fuchsia 2px solid;
-
+    font-family: 'Lucida Console';
+}
+.current-tf{
+    border-bottom: #111 2px solid;
 }
 .custom-tf:focus{
     border: 2px dashed black;
@@ -107,5 +115,5 @@ h1, h2, h3, h4, h5, h6{
     width: 100%;
     height: 100vh;
     background-color: #444444;
-    background-image: url("handh.png");
+    /*background-image: url("handh.png");*/
 }

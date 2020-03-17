@@ -18,7 +18,22 @@ class routine{
         this.data.pop();
     }
 }
-$(".routine-heading").hide();
+function getCapitalizedWord(string){
+    
+    var new_char = string[0].toUpperCase();
+    var new_string = new_char + string.substring(1, string.length);
+    console.log("new string", new_string);
+    return new_string;
+}
+/*
+function customizeHeading(){
+
+}
+function customizePage(){
+    customizeHeading();
+}
+*/
+//customizePage();
 var board = new routine();
 function addTaskToDisplay(task){
     var htmlString = '<div class = "task" tabindex = "0">'+
@@ -32,6 +47,25 @@ function addTaskToDisplay(task){
     //htmlString.append();
     $(".routine").append(htmlString);
 }
+//resizeHeadingField();
+function resizeHeadingField(){
+    
+    console.log("name changed");
+    var new_name = getCapitalizedWord($(".heading-tf").val());
+    $(".heading-tf").val(new_name);
+    var new_length = $(".heading-tf").val().length;
+    console.log("current text length:", new_length);
+    $('.heading-tf').attr('size', new_length);
+
+}
+$(document).ready(function(){
+    /*$("input").change(function(){
+        alert("The text has been changed.");
+    });*/
+    $(".heading-tf").change( function(){
+        resizeHeadingField();
+    });    
+});
 
 function hideUploadInfo(){
     $(".how-to-upload").hide();
@@ -82,15 +116,18 @@ $(document).on('keyup', function(e) {
     if(e.which == 8){
         //backspace
         console.log("backspace");
-        removeFocussedContent();
+        
+        if($(".task").is(":focus") || $(".current-task").is(":focus")){
+            removeFocussedContent();
+        }
     }
 
     if(e.which == 13) {
         //enter
-        //if($(".task").is(":focus") || $(".current-task").is(":focus")){
-            
-        //}
+        if($(".task").is(":focus") || $(".current-task").is(":focus")){
+            appendContent();
+        }
         console.log("enter key pressed");
-        appendContent();
+        
     }
 });
