@@ -32,17 +32,19 @@
                 </div>
                 <div class = "current-task" tabindex = "0">
                     <div class="row">
-                        <div class="col">
-                            <input class = "custom-tf description current-tf" value = "Breakfast"></input>
+                        <div class="col-s-4">
+                            <label for="description">Description</label>
+                            <input class = "custom-tf description current-tf" id = "description" placeholder="Take Medicine"></input>
                         </div>
                         
-                        <div class="col">
-                            <input class = "custom-tf start current-tf" value = "9:00 am"></input>
-                            to
-                            <input class = "custom-tf end current-tf" value = "10:00 am"></input>
+                        <div class="col-s-6">
+                            <label for="start">Start</label>
+                            <input class = "custom-tf start current-tf" id = "start" placeholder="9:00 AM"></input>
+                            <label for="end">End</label>
+                            <input class = "custom-tf end current-tf" id = "end" placeholder="10:00 AM"></input>
                         </div>
-                        <div class = "col">
-                            <button class = "custom-div-btn"> <i class="fas fa-plus-circle"></i> Add to Routine </button>
+                        <div class = "col-s-2">
+                            <button class = "custom-div-btn"> <i class="fas fa-plus-circle"></i> Add </button>
                         </div>
                     </div>
                 </div>
@@ -53,7 +55,7 @@
                         <div class = "custom-div-btn"><i class="fas fa-clock"></i> Tasks Happening Now</div>
                     </div>
                     <div class="col-s-3">
-                        <div class = "custom-div-btn"><i class="fas fa-globe-americas"></i> All Tasks</div>
+                        <div class = "custom-div-btn" id = "all-tasks"><i class="fas fa-globe-americas"></i> All Tasks</div>
                     </div>
                 </div>
                 <hr/>

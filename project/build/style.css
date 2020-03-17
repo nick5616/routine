@@ -20,11 +20,15 @@ body{
     font-family: 'Lucida Console';
     max-width: 10ch;
 }
+label{
+    display: inline-block;
+}
 .custom-tf{
     background-color: transparent; 
     border: none;
     font-family: 'Lucida Console';
     min-width: 8ch;
+    margin: 2px;
 }
 .current-tf{
     border-bottom: #111 2px solid;
@@ -69,6 +73,17 @@ body{
     padding: 2px 5px;
     margin: 0 5px;
 }
+.task .custom-div-btn{
+    display: none;
+}
+
+.task:focus .custom-div-btn{
+    display: inherit;
+}
+
+.task:hover .custom-div-btn{
+    display: inherit;
+}
 
 .task, .current-task{
     /*border-radius: 5px;*/
@@ -89,6 +104,15 @@ h1, h2, h3, h4, h5, h6{
     text-align: left;
     /*font-family: Verdana, Geneva, Tahoma, sans-serif;*/
     /*color: fuchsia;*/
+}
+/*h2{
+    font-family: 'Verdana';
+}*/
+h1{
+    font-size: 6vh;
+}
+h2{
+    font-size: 3vh;
 }
 .upload-button{
     width: 15vw;
