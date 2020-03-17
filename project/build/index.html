@@ -24,30 +24,51 @@
     <div class = "background">
         <div class = "wrapper">
             <div class = "routine-holder">
-                
                 <h1 class = "routine-heading"><input class = "heading-tf" placeholder = "Your Name"></input>'s Routine</h1>
                 <h2 class = "tutorial-heading">Enter Your First Task</h2>
                 <hr class = "routine-heading"/>
                 <div class = "routine">
+
                 </div>
                 <div class = "current-task" tabindex = "0">
-                    <input class = "custom-tf description current-tf" value = "Breakfast"></input>
-                    from
-                    <input class = "custom-tf start current-tf" value = "9:00 am"></input>
-                    to
-                    <input class = "custom-tf end current-tf" value = "10:00 am"></input>
-                    <button class = "custom-div-btn"> Add </button>
-                </div>
-                <div class = "how-to-upload">
-                    <h1>
-                        <div class = "content-break"> OR </div>
-                    </h1>
-                    <h1>
-                        Upload Your Routine
-                    </h1>
-                    <div class = "upload-button block" tabindex="0">
-                        <i class="fas fa-file-upload upload-icon"></i>
+                    <div class="row">
+                        <div class="col">
+                            <input class = "custom-tf description current-tf" value = "Breakfast"></input>
+                        </div>
+                        
+                        <div class="col">
+                            <input class = "custom-tf start current-tf" value = "9:00 am"></input>
+                            to
+                            <input class = "custom-tf end current-tf" value = "10:00 am"></input>
+                        </div>
+                        <div class = "col">
+                            <button class = "custom-div-btn"> <i class="fas fa-plus-circle"></i> Add to Routine </button>
+                        </div>
                     </div>
+                </div>
+                
+                <h2>Show Me</h2>
+                <div class="row">
+                    <div class="col-s-3">
+                        <div class = "custom-div-btn"><i class="fas fa-clock"></i> Tasks Happening Now</div>
+                    </div>
+                    <div class="col-s-3">
+                        <div class = "custom-div-btn"><i class="fas fa-globe-americas"></i> All Tasks</div>
+                    </div>
+                </div>
+                <hr/>
+                <h2>Routine Files</h2>
+                <div class="row">
+                    <div class="col-s-3">
+                        <div class = "custom-div-btn"> <i class="fas fa-file-upload upload-icon"></i> Import Routine</div>
+                    </div>
+                    <div class="col-s-3">
+                        <div class = "custom-div-btn"><i class="fas fa-file-download"></i> Export Routine</div>
+                    </div>
+                </div>
+                <!--div class = "custom-div-btn">Export Routine</div-->
+                <div class = "how-to-upload">
+                    
                 </div>
             </div>
         </div>

@@ -18,8 +18,7 @@ class routine{
         this.data.pop();
     }
 }
-function getCapitalizedWord(string){
-    
+function getCapitalizedWord(string){ 
     var new_char = string[0].toUpperCase();
     var new_string = new_char + string.substring(1, string.length);
     console.log("new string", new_string);
@@ -36,17 +35,24 @@ function customizePage(){
 //customizePage();
 var board = new routine();
 function addTaskToDisplay(task){
-    var htmlString = '<div class = "task" tabindex = "0">'+
-    '<input class = "custom-tf description" value = "'+task.desc+'"></input>'+
-    'from'+
-    '<input class = "custom-tf start" value = "'+task.start+'"></input>'+
-    'to'+
-    '<input class = "custom-tf end" value = "'+task.end+'"></input>'+
-    '<button class = "custom-div-btn">Remove</button>'+
-    '</div>';
-    //htmlString.append();
-    $(".routine").append(htmlString);
+    var html_string = '<div class = "current-task" tabindex = "0">'+
+                        '<div class="row">'+
+                            '<div class="col">'+
+                                '<input class = "custom-tf description current-tf" value = "Breakfast"></input>'+
+                            '</div>'+
+                            '<div class="col">'+
+                                '<input class = "custom-tf start current-tf" value = "9:00 am"></input>'+
+                                'to'+
+                                '<input class = "custom-tf end current-tf" value = "10:00 am"></input>'+
+                            '</div>'+
+                            '<div class = "col">'+
+                                '<button class = "custom-div-btn"> <i class="fas fa-minus-circle"></i> Remove </button>'+
+                            '</div>'+
+                        '</div>'+
+                    '</div>';
+    //$(".routine").append();
 }
+
 //resizeHeadingField();
 function resizeHeadingField(){
     
@@ -57,6 +63,16 @@ function resizeHeadingField(){
     console.log("current text length:", new_length);
     $('.heading-tf').attr('size', new_length);
 
+}
+
+
+
+function insertTask(task){
+    
+}
+
+function getCurrentTasks(){
+    current = [];
 }
 $(document).ready(function(){
     /*$("input").change(function(){
@@ -77,12 +93,27 @@ function showUploadInfo(){
 
 function removeFocussedContent(){
     //remove task
-    $(".routine").children().is(":focus").remove();
+    var children = $(".routine").children();
+    
     console.log("removed task. this is the new length", board.data.length);
 
     if(board.data.length == 0){
         showUploadInfo();
     }
+}
+
+function toMilitaryTime(){
+    var time = $("#starttime").val();
+    var hours = Number(time.match(/^(\d+)/)[1]);
+    var minutes = Number(time.match(/:(\d+)/)[1]);
+    var AMPM = time.match(/\s(.*)$/)[1];
+    if(AMPM == "PM" && hours<12) hours = hours+12;
+    if(AMPM == "AM" && hours==12) hours = hours-12;
+    var sHours = hours.toString();
+    var sMinutes = minutes.toString();
+    if(hours<10) sHours = "0" + sHours;
+    if(minutes<10) sMinutes = "0" + sMinutes;
+    alert(sHours + ":" + sMinutes);
 }
 
 function hideTutorialHeading(){

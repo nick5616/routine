@@ -24,6 +24,7 @@ body{
     background-color: transparent; 
     border: none;
     font-family: 'Lucida Console';
+    min-width: 8ch;
 }
 .current-tf{
     border-bottom: #111 2px solid;
@@ -55,6 +56,10 @@ body{
 .custom-icon-btn{
     width: 1vw;
 }
+.row{
+    margin-left: 10px;
+    margin-right: 10px;
+}
 .custom-div-btn{
     display: inline-block;
     border: 1px solid black;
@@ -62,6 +67,7 @@ body{
     border-radius: 5px;
     /*box-shadow: 0 0 3px #222222;*/
     padding: 2px 5px;
+    margin: 0 5px;
 }
 
 .task, .current-task{
@@ -95,6 +101,12 @@ h1, h2, h3, h4, h5, h6{
 
 .content-break{
     text-align: center;
+}
+.modify-view{
+    
+}
+.how-to-upload{
+    display: inline-block;
 }
 .block{
     display: inline-block;
