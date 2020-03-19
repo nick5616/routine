@@ -1,7 +1,4 @@
 class task {
-    desc;
-    start = "0000";
-    end = "2399";
     constructor(d, s, e){
         console.log("invoked main constructor");
         this.desc = d;
@@ -18,6 +15,21 @@ class routine{
     removeLastTask(task){
         this.data.pop();
     }
+}
+var display_mode = "All";
+
+setInterval(function() {
+    console.log("time has passed");
+    updateUI();
+}, 5 * 1000);
+
+
+function routineIsEmpty(){
+    return $(".routine").is(":empty");
+}
+function getCurrentMilitaryTime(){
+    var date = new Date();
+    return date.getHours().toString()+date.getMinutes().toString();
 }
 function getCapitalizedWord(string){ 
     var new_char = string[0].toUpperCase();
@@ -42,32 +54,79 @@ function customizePage(){
 }
 */
 //customizePage();
-one = new task("brush teeth", "0000", "1200");
-two = new task("shower", "0001", "1200");
+one = new task("brush teeth", "2248", "2250");
+two = new task("shower", "2249", "2300");
 three = new task("eat crayon", "0002", "1200");
 var board = new routine();
-board.data.push(one);
-board.data.push(two);
-board.data.push(three);
+//board.data.push(one);
+//board.data.push(two);
+//board.data.push(three);
 function addTaskToDisplay(task){
-    var html_string = '<div class = "task" tabindex = "0">'+
-                        '<div class="row">'+
-                            '<div class="col">'+
-                                '<input class = "custom-tf description" value = "'+capitalizeSentence(task.desc)+'"></input>'+
-                            '</div>'+
-                            '<div class="col">'+
-                                '<input class = "custom-tf start" value = "'+toNormalTime(task.start)+'"></input>'+
-                                'to'+
-                                '<input class = "custom-tf end" value = "'+toNormalTime(task.end)+'"></input>'+
-                            '</div>'+
-                            '<div class = "col">'+
-                                '<button class = "custom-div-btn" id = "remove-button"> <i class="fas fa-minus-circle"></i> Remove </button>'+
-                            '</div>'+
-                        '</div>'+
-                    '</div>';
-    $(".routine").append(html_string);
+    if(task.start == "0000" && task.end == "0000"){
+        console.log("timeless task");
+        var timeless_task = '<div class = "task" tabindex = "0">'+
+        '<div class="row">'+
+            '<div class="col">'+
+                '<div class = "task-item">'+capitalizeSentence(task.desc)+'</div>'+
+            '</div>'+
+            '<div class="col">'+
+                '<div class = "task-item">All Day</div>'+
+            '</div>'+
+            '<div class="col">'+
+                '<div class = "task-item"></div>'+
+            '</div>'+
+            '<div class="col">'+
+                '<button class = "custom-div-btn" tabindex="0" id = "remove-button"> <i class="fas fa-minus-circle"></i> Remove </button>'+
+            '</div>'+
+        '</div>'+
+        '</div>';
+        $(".routine").append(timeless_task);
+    }
+    else{
+        console.log("task description", task.desc);
+        var normal_task = '<div class = "task" tabindex = "0">'+
+            '<div class="row">'+
+                '<div class="col">'+
+                    '<div class = "task-item">'+capitalizeSentence(task.desc)+'</div>'+
+                '</div>'+
+                '<div class="col">'+
+                    '<div class = "task-item">'+toNormalTime(task.start)+'</div>'+
+                '</div>to'+
+                '<div class="col">'+
+                    '<div class = "task-item">'+toNormalTime(task.end)+'</div>'+
+                '</div>'+
+                '<div class="col">'+
+                    '<button class = "custom-div-btn" tabindex="0" id = "remove-button"> <i class="fas fa-minus-circle"></i> Remove </button>'+
+                '</div>'+
+            '</div>'+
+        '</div>';
+        $(".routine").append(normal_task);
+    }    
 }
-
+function earliest_start(e1, e2){
+    return e1.start - e2.start;
+}
+function addRoutineToDisplay(data){
+    data.sort(earliest_start);
+    console.log("input data sorted");
+    console.log("state of array", data);
+    var html_string = '';
+    console.log("length of passed array", data.length);
+    //clearDisplay();
+    if(data.length < 1){
+        html_string = '<h3 style = "text-align: center">Your Tasks Will Appear Here</h3>';
+        $(".routine").append(html_string);
+    }
+    else {
+        //geq 1
+        data.forEach((task)=>{
+            addTaskToDisplay(task);
+        });
+    }
+}
+function clearDisplay(){
+    $(".routine").empty();
+}
 function hideTutorial(){
     $(".tutorial-heading").hide();
 }
@@ -89,15 +148,13 @@ function getAllTasks(){
 }
 
 function displayAllTasks(){
-    console.log("gonna display all the tasks");
-    getAllTasks().forEach((current_task)=>{
-        console.log("current task", current_task);
-        addTaskToDisplay(current_task);
-    });
-        
-    
+    display_mode = "All";
+    updateUI();
 }
-
+function displayNowTasks(){
+    display_mode = "Current";
+    updateUI();
+}
 
 function insertTask(task){
     //insert the task in the right spot
@@ -105,55 +162,101 @@ function insertTask(task){
 }
 
 function updateUI(){
-    var current_method = "All";
-    if(current_method == "All"){
-        if(getAllTasks().length > 0){
-            hideTutorial();
-        }
-        else {
-            showTutorial();
-        }
+    clearDisplay();
+    if(display_mode == "All"){
+        $(".routine").append("<h2>All Tasks</h2>");
+        addRoutineToDisplay(board.data);
     }
-    else if(current_method == "Current"){
-        hideTutorial();
-        if(getCurrentTasks().length < 1){
-            $(".routine").append("You don't appear to have any tasks right now");
-        }
+    else if(display_mode == "Current"){
+        $(".routine").append("<h2>Current Tasks</h2>");
+        addRoutineToDisplay(getCurrentTasks());
     }
     else {
         console.log("current_method not selected");
     }
 }
-
+function inside(time, beginning, end){
+    var t = parseInt(time);
+    var b = parseInt(beginning);
+    var e = parseInt(end);
+    var bool = t <= e && t >= b;
+    console.log("happening now: "+bool);
+    return bool;
+}
 function getCurrentTasks(){
-    current = [];
+    var current_tasks = [];
+    var current_time = getCurrentMilitaryTime();
+    console.log("current military time", current_time);
+    board.data.forEach((task)=>{
+        if(inside(current_time, task.start, task.end)){
+            current_tasks.push(task);
+        }
+    });
+    return current_tasks;
 }
 
-function displayCurrentTasks(){
-
-}
 
 $(document).ready(function(){
+    if(routineIsEmpty) {
+        hideTutorial();
+    }
+    updateUI();
+     // 60 * 1000 milsec
     /*$("input").change(function(){
         alert("The text has been changed.");
     });*/
     $(".heading-tf").change( function(){
         resizeHeadingField();
     });
+    $("#now-tasks").click(()=>{
+        console.log("current tasks clicked");
+
+        displayNowTasks();
+    });
     $("#all-tasks").click(()=>{
         console.log("all tasks clicked");
+
         displayAllTasks();
     });
-    $(document).on('click', $("#remove-button"), ()=>{
+    $(document).on('click', '#remove-button', ()=>{
         console.log("remove button clicked");
         $(this).remove();
         //$(task).remove();
     });
-    
+    $(document).on('focus', '#remove-button', ()=>{
+        console.log("remove in focus");
+        //add infocus class
+        //console.log("great grandparent", $(this).parent().parent().parent());
+        console.log($("#remove-button:focus").parent().parent().parent().html());
+        $("#remove-button:focus").parent().parent().parent().remove();
+    });
+    $(document).on('focus', '#add-button', ()=>{
+        
+    });
+    $(document).on('blur', '.task', ()=>{
+        console.log("remove blur");
+        //add infocus class
+        //console.log("great grandparent", $(this).parent().parent().parent());
+        console.log($(".task:focus"));
+    });
         
 });
-function getDescription(task){
-    var description = $(task).child;
+function getNewTaskDescription(){
+    return $("#description").val();
+}
+function getNewTaskStart(){
+    return $("#start").val();
+}
+function getNewTaskEnd(){
+    return $("#end").val();
+}
+function getNewTask(){
+    return new task(getNewTaskDescription(), toMilitaryTime(getNewTaskStart()), toMilitaryTime(getNewTaskEnd()));
+}
+function clearAddTask(){
+    $("#description").val("");
+    $("#start").val("");
+    $("#end").val("");
 }
 function hideUploadInfo(){
     $(".how-to-upload").hide();
@@ -162,11 +265,15 @@ function hideUploadInfo(){
 function showUploadInfo(){
     $(".how-to-upload").show();
 }
+function removeTaskFromRoutineArray(){
+
+}
 
 function removeFocussedContent(){
     //remove task
-    var children = $(".routine").children();
-    
+    var description = $("#description:focus").val();
+    $(".task:focus").remove();
+    removeTaskFromRoutineArray();
     console.log("removed task. this is the new length", board.data.length);
 
     if(board.data.length == 0){
@@ -174,8 +281,11 @@ function removeFocussedContent(){
     }
 }
 
-function toMilitaryTime(){
-    var time = $("#starttime").val();
+function toMilitaryTime(time){
+    if(time.length == 0){
+        return "0000";
+    }
+    //var time = $("#starttime").val();
     var hours = Number(time.match(/^(\d+)/)[1]);
     var minutes = Number(time.match(/:(\d+)/)[1]);
     var AMPM = time.match(/\s(.*)$/)[1];
@@ -241,23 +351,11 @@ function showRoutineHeading(){
     $(".routine-heading").show();
 }
 function appendContent(){
-    console.log("a task has focus");
-    var d = $(".description").val();
-    var s = $(".start").val();
-    var e = $(".end").val();
-    console.log("fetched vals", d, s.toMilitaryTime(), e.toMilitaryTime());
-    var myBoy = new task(d, s, e);
-    console.log("created task", myBoy);
-    board.appendTask(myBoy);
-    addTaskToDisplay(myBoy);
-    console.log("board.length", board.data.length);
-    if(board.data.length > 0) {
-        console.log("gonna hide it")
-        hideUploadInfo();
-        hideTutorialHeading();
-        showRoutineHeading();
-    }
-    console.log('state of routine', board);
+    //to do: replace this with insert task and do a variant of insertion sort
+    var new_task = getNewTask();
+    board.data.push(new_task);
+    updateUI();
+    clearAddTask();
 }
 
 $(document).on('keyup', function(e) {
@@ -265,14 +363,14 @@ $(document).on('keyup', function(e) {
         //backspace
         console.log("backspace");
         
-        if($(".task").is(":focus") || $(".current-task").is(":focus")){
+        if($(".task").is(":focus")){
             removeFocussedContent();
         }
     }
 
     if(e.which == 13) {
         //enter
-        if($(".task").is(":focus") || $(".current-task").is(":focus")){
+        if($(".current-task").is(":focus")){
             appendContent();
         }
         console.log("enter key pressed");

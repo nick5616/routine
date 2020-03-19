@@ -1,0 +1,15 @@
+{
+    "name": "Nick",
+    "tasks": [
+        {
+            "description": "Eat Breakfast",
+            "start": "0900",
+            "end": "1000"
+        },
+        {
+            "description": "Get Ready For Bed",
+            "start": "2200",
+            "end": "2300"
+        }
+    ]
+}
