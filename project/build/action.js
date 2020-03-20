@@ -6,9 +6,11 @@ class task {
         this.end = e;
     }
 }
-class routine{
-    
-    data = [];
+class routine {
+    //data = [];
+    constructor(){
+        this.data = [];
+    }
     appendTask(task){
         this.data.push(task);
     }
@@ -16,16 +18,82 @@ class routine{
         this.data.pop();
     }
 }
+
 var display_mode = "All";
-
-setInterval(function() {
-    console.log("time has passed");
-    updateUI();
-}, 5 * 1000);
-
-
 function routineIsEmpty(){
     return $(".routine").is(":empty");
+}
+function relative_luminance(colorArray8Bit){
+    var r, g, b;
+    var l;
+    var standard_red = colorArray8Bit[0]/255;
+    var standard_green = colorArray8Bit[1]/255;
+    var standard_blue = colorArray8Bit[2]/255; 
+    console.log("sR", standard_red);
+    console.log("sG", standard_green);
+    console.log("sB", standard_blue);
+    //console.log(standard_red);
+    if(standard_red <= 0.03928){
+      console.log("path 1");
+      r = standard_red/12.92;
+    }
+    else {
+      
+      r = Math.pow(((standard_red+0.055)/1.055), 2.4);
+  
+    }
+  
+    if(standard_green <= 0.03928){
+      console.log("path 1");
+      g = standard_green/12.92;
+    }
+    else {
+      g= Math.pow(((standard_green+0.055)/1.055), 2.4);
+    }
+  
+    if(standard_blue <= 0.03928){
+      console.log("path 1");
+      b = standard_blue/12.92;
+    }
+    else {
+      b = Math.pow(((standard_blue+0.055)/1.055), 2.4);
+    }
+    console.log("R", r);
+    console.log("G", g);
+    console.log("B", b);
+    l = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    console.log("L", l);
+    console.log(typeof l);
+    return l;
+}
+
+function generateRandomColor(){
+    console.log("generating primary color");
+    var red = Math.floor(Math.random() * 255);
+    var green = Math.floor(Math.random() * 255);
+    var blue = Math.floor(Math.random() * 255);
+    return [red, green, blue];
+}
+
+function colorArrayToString(array){
+    return "rgb("+array[0]+","+array[1]+","+array[2]+")";
+};
+
+function generateColorScheme(){
+    var primary_color = generateRandomColor();
+    var secondary_color = generateRandomColor();
+    var cond1 = Math.abs(relative_luminance(primary_color) - relative_luminance([0,0,0])) < 0.9;
+    while(relative_luminance(primary_color) < 0.5){
+        //relative luminance(primary_color) >= threshold
+        primary_color = generateRandomColor();
+        //secondary_color = generateRandomColor();
+    }
+    return [primary_color, secondary_color];
+}
+function setElemsPrimaryColor(){
+    var primary_color = generateRandomColor();
+    console.log("color: ",primary_color);
+    $(".prim").css("background-color",primary_color);
 }
 function getCurrentMilitaryTime(){
     var date = new Date();
@@ -87,16 +155,16 @@ function addTaskToDisplay(task){
         var normal_task = '<div class = "task" tabindex = "0">'+
             '<div class="row">'+
                 '<div class="col">'+
-                    '<div class = "task-item">'+capitalizeSentence(task.desc)+'</div>'+
+                    '<div class = "task-item dynamic">'+capitalizeSentence(task.desc)+'</div>'+
                 '</div>'+
                 '<div class="col">'+
-                    '<div class = "task-item">'+toNormalTime(task.start)+'</div>'+
+                    '<div class = "task-item dynamic">'+toNormalTime(task.start)+'</div>'+
                 '</div>to'+
                 '<div class="col">'+
-                    '<div class = "task-item">'+toNormalTime(task.end)+'</div>'+
+                    '<div class = "task-item dynamic">'+toNormalTime(task.end)+'</div>'+
                 '</div>'+
                 '<div class="col">'+
-                    '<button class = "custom-div-btn" tabindex="0" id = "remove-button"> <i class="fas fa-minus-circle"></i> Remove </button>'+
+                    '<button class = "custom-div-btn dynamic" tabindex="0" id = "remove-button"> <i class="fas fa-minus-circle"></i> Remove </button>'+
                 '</div>'+
             '</div>'+
         '</div>';
@@ -149,10 +217,18 @@ function getAllTasks(){
 
 function displayAllTasks(){
     display_mode = "All";
+    $("#now-tasks").removeClass("toggled-button");
+    $("#all-tasks").addClass("toggled-button");
+    $("#now-tasks").removeClass("prim");
+    $("#all-tasks").addClass("prim");
     updateUI();
 }
 function displayNowTasks(){
     display_mode = "Current";
+    $("#now-tasks").addClass("toggled-button");
+    $("#all-tasks").removeClass("toggled-button");
+    $("#now-tasks").addClass("prim");
+    $("#all-tasks").removeClass("prim");
     updateUI();
 }
 
@@ -181,6 +257,9 @@ function inside(time, beginning, end){
     var e = parseInt(end);
     var bool = t <= e && t >= b;
     console.log("happening now: "+bool);
+    if(beginning == "0000" && end == "0000"){
+        return true;
+    }
     return bool;
 }
 function getCurrentTasks(){
@@ -194,12 +273,30 @@ function getCurrentTasks(){
     });
     return current_tasks;
 }
-
+function applyColorScheme(){
+    var colors = generateColorScheme();
+    console.log("colors", colors);
+    
+    $(".background").css("color", colorArrayToString(colors[0]));
+    $(".dynamic").css("color", colorArrayToString(colors[0]));
+    $(".background").css("background-color", colorArrayToString([0,0,0]));
+}
 
 $(document).ready(function(){
     if(routineIsEmpty) {
         hideTutorial();
     }
+    
+    $("#now-tasks").removeClass("toggled-button");
+    $("#all-tasks").addClass("toggled-button");
+    $("#now-tasks").removeClass("prim");
+    $("#all-tasks").addClass("prim");
+    applyColorScheme();
+    setInterval(function() {
+        console.log("time has passed");
+        updateUI();
+    }, 5 * 1000);
+
     updateUI();
      // 60 * 1000 milsec
     /*$("input").change(function(){
@@ -370,7 +467,8 @@ $(document).on('keyup', function(e) {
 
     if(e.which == 13) {
         //enter
-        if($(".current-task").is(":focus")){
+        if($(".current-task").is(":focus" || $("#description").is(":focus"))){
+            console.log("exectuting enter");
             appendContent();
         }
         console.log("enter key pressed");

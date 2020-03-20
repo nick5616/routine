@@ -1,0 +1,65 @@
+{
+    "name": "Olivia",
+    "tasks": [
+        {
+            "description": "stare at the wall",
+            "start": "0510",
+            "end": "0520"
+        },
+        {
+            "description": "brush teeth",
+            "start": "0610",
+            "end": "0640"
+        },
+        {
+            "description": "shower",
+            "start": "0610",
+            "end": "0630"
+        },
+        {
+            "description": "brush hair",
+            "start": "0640",
+            "end": "0640"
+        },
+        {
+            "description": "me time",
+            "start": "0610",
+            "end": "0640"
+        },
+        {
+            "description": "go to school",
+            "start": "0720",
+            "end": "1540"
+        },
+        {
+            "description": "homework",
+            "start": "1542",
+            "end": "1600"
+        },
+        {
+            "description": "play minecraft",
+            "start": "1600",
+            "end": "1640"
+        },
+        {
+            "description": "dinner",
+            "start": "1700",
+            "end": "1800"
+        },
+        {
+            "description": "art stuff",
+            "start": "1800",
+            "end": "1900"
+        },
+        {
+            "description": "watch tv",
+            "start": "1900",
+            "end": "2000"
+        },
+        {
+            "description": "Get Ready For Bed",
+            "start": "2000",
+            "end": "2100"
+        }
+    ]
+}
