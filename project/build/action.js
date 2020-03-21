@@ -1,6 +1,6 @@
 class task {
     constructor(d, s, e){
-        console.log("invoked main constructor");
+        //console.log("invoked main constructor");
         this.desc = d;
         this.start = s;
         this.end = e;
@@ -29,12 +29,12 @@ function relative_luminance(colorArray8Bit){
     var standard_red = colorArray8Bit[0]/255;
     var standard_green = colorArray8Bit[1]/255;
     var standard_blue = colorArray8Bit[2]/255; 
-    console.log("sR", standard_red);
-    console.log("sG", standard_green);
-    console.log("sB", standard_blue);
-    //console.log(standard_red);
+    //console.log("sR", standard_red);
+    //console.log("sG", standard_green);
+    //console.log("sB", standard_blue);
+    ////console.log(standard_red);
     if(standard_red <= 0.03928){
-      console.log("path 1");
+      //console.log("path 1");
       r = standard_red/12.92;
     }
     else {
@@ -44,7 +44,7 @@ function relative_luminance(colorArray8Bit){
     }
   
     if(standard_green <= 0.03928){
-      console.log("path 1");
+      //console.log("path 1");
       g = standard_green/12.92;
     }
     else {
@@ -52,23 +52,23 @@ function relative_luminance(colorArray8Bit){
     }
   
     if(standard_blue <= 0.03928){
-      console.log("path 1");
+      //console.log("path 1");
       b = standard_blue/12.92;
     }
     else {
       b = Math.pow(((standard_blue+0.055)/1.055), 2.4);
     }
-    console.log("R", r);
-    console.log("G", g);
-    console.log("B", b);
+    //console.log("R", r);
+    //console.log("G", g);
+    //console.log("B", b);
     l = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-    console.log("L", l);
-    console.log(typeof l);
+    //console.log("L", l);
+    //console.log(typeof l);
     return l;
 }
 
 function generateRandomColor(){
-    console.log("generating primary color");
+    //console.log("generating primary color");
     var red = Math.floor(Math.random() * 255);
     var green = Math.floor(Math.random() * 255);
     var blue = Math.floor(Math.random() * 255);
@@ -79,20 +79,30 @@ function colorArrayToString(array){
     return "rgb("+array[0]+","+array[1]+","+array[2]+")";
 };
 
+function generateBackgroundColor(){
+    var sunrise = [255, 219, 0];
+    var color_string = "background: linear-gradient(0deg, rgba(0,241,254,1) 0%, rgba(205,245,249,1) 100%)";
+    var color_array = [0,241,254];
+    
+    return [color_string, color_array];
+}
+  
 function generateColorScheme(){
-    var primary_color = generateRandomColor();
-    var secondary_color = generateRandomColor();
-    var cond1 = Math.abs(relative_luminance(primary_color) - relative_luminance([0,0,0])) < 0.9;
-    while(relative_luminance(primary_color) < 0.5){
-        //relative luminance(primary_color) >= threshold
-        primary_color = generateRandomColor();
+    var background_color = generateBackgroundColor();
+    var background_color_luminance = relative_luminance(background_color[1]);
+    var color = generateRandomColor();
+    //console.log("primary color's rel lum", relative_luminance(primar))
+    while(Math.abs(relative_luminance(color) - background_color_luminance) < 0.5){
+        //console.log("relative_luminance is", relative_luminance(color));
+        color = generateRandomColor();
         //secondary_color = generateRandomColor();
     }
-    return [primary_color, secondary_color];
+    console.log("relative_luminance is", relative_luminance(color));
+    return [color, background_color[0]];
 }
 function setElemsPrimaryColor(){
     var primary_color = generateRandomColor();
-    console.log("color: ",primary_color);
+    ////console.log("color: ",primary_color);
     $(".prim").css("background-color",primary_color);
 }
 function getCurrentMilitaryTime(){
@@ -102,7 +112,7 @@ function getCurrentMilitaryTime(){
 function getCapitalizedWord(string){ 
     var new_char = string[0].toUpperCase();
     var new_string = new_char + string.substring(1, string.length);
-    console.log("new string", new_string);
+    ////console.log("new string", new_string);
     return new_string;
 }
 function capitalizeSentence(sentence){
@@ -131,7 +141,7 @@ var board = new routine();
 //board.data.push(three);
 function addTaskToDisplay(task){
     if(task.start == "0000" && task.end == "0000"){
-        console.log("timeless task");
+        //console.log("timeless task");
         var timeless_task = '<div class = "task" tabindex = "0">'+
         '<div class="row">'+
             '<div class="col">'+
@@ -151,7 +161,7 @@ function addTaskToDisplay(task){
         $(".routine").append(timeless_task);
     }
     else{
-        console.log("task description", task.desc);
+        //console.log("task description", task.desc);
         var normal_task = '<div class = "task" tabindex = "0">'+
             '<div class="row">'+
                 '<div class="col">'+
@@ -176,10 +186,10 @@ function earliest_start(e1, e2){
 }
 function addRoutineToDisplay(data){
     data.sort(earliest_start);
-    console.log("input data sorted");
-    console.log("state of array", data);
+    //console.log("input data sorted");
+    //console.log("state of array", data);
     var html_string = '';
-    console.log("length of passed array", data.length);
+    //console.log("length of passed array", data.length);
     //clearDisplay();
     if(data.length < 1){
         html_string = '<h3 style = "text-align: center">Your Tasks Will Appear Here</h3>';
@@ -203,11 +213,11 @@ function showTutorial(){
 }
 //resizeHeadingField();
 function resizeHeadingField(){
-    console.log("name changed");
+    //console.log("name changed");
     var new_name = getCapitalizedWord($(".heading-tf").val());
     $(".heading-tf").val(new_name);
     var new_length = $(".heading-tf").val().length;
-    console.log("current text length:", new_length);
+    //console.log("current text length:", new_length);
     $('.heading-tf').attr('size', new_length);
 }
 
@@ -248,7 +258,7 @@ function updateUI(){
         addRoutineToDisplay(getCurrentTasks());
     }
     else {
-        console.log("current_method not selected");
+        //console.log("current_method not selected");
     }
 }
 function inside(time, beginning, end){
@@ -256,7 +266,7 @@ function inside(time, beginning, end){
     var b = parseInt(beginning);
     var e = parseInt(end);
     var bool = t <= e && t >= b;
-    console.log("happening now: "+bool);
+    //console.log("happening now: "+bool);
     if(beginning == "0000" && end == "0000"){
         return true;
     }
@@ -265,7 +275,7 @@ function inside(time, beginning, end){
 function getCurrentTasks(){
     var current_tasks = [];
     var current_time = getCurrentMilitaryTime();
-    console.log("current military time", current_time);
+    //console.log("current military time", current_time);
     board.data.forEach((task)=>{
         if(inside(current_time, task.start, task.end)){
             current_tasks.push(task);
@@ -274,12 +284,29 @@ function getCurrentTasks(){
     return current_tasks;
 }
 function applyColorScheme(){
-    var colors = generateColorScheme();
-    console.log("colors", colors);
+    var colors = generateTwoHighContrastColors();
+    //console.log("colors", colors);
     
     $(".background").css("color", colorArrayToString(colors[0]));
     $(".dynamic").css("color", colorArrayToString(colors[0]));
-    $(".background").css("background-color", colorArrayToString([0,0,0]));
+    $(".background").css("background", colorArrayToString(colors[1]));
+}
+function contrast_ratio(lum1, lum2){
+    var l1 = Math.max(lum1, lum2);
+    var l2 = Math.min(lum1, lum2);
+    var cr = (l1 + 0.05)/(l2 + 0.05);
+    console.log(cr);
+    return cr;
+}
+
+function generateTwoHighContrastColors(){
+    var color1 = generateRandomColor();
+    var color2 = generateRandomColor();
+    while(contrast_ratio(relative_luminance(color1), relative_luminance(color2)) < 3){
+        color1 = generateRandomColor();
+        //color2 = generateRandomColor();
+    }
+    return [color1, color2];
 }
 
 $(document).ready(function(){
@@ -293,7 +320,7 @@ $(document).ready(function(){
     $("#all-tasks").addClass("prim");
     applyColorScheme();
     setInterval(function() {
-        console.log("time has passed");
+        //console.log("time has passed");
         updateUI();
     }, 5 * 1000);
 
@@ -306,35 +333,35 @@ $(document).ready(function(){
         resizeHeadingField();
     });
     $("#now-tasks").click(()=>{
-        console.log("current tasks clicked");
+        //console.log("current tasks clicked");
 
         displayNowTasks();
     });
     $("#all-tasks").click(()=>{
-        console.log("all tasks clicked");
+        //console.log("all tasks clicked");
 
         displayAllTasks();
     });
     $(document).on('click', '#remove-button', ()=>{
-        console.log("remove button clicked");
+        //console.log("remove button clicked");
         $(this).remove();
         //$(task).remove();
     });
     $(document).on('focus', '#remove-button', ()=>{
-        console.log("remove in focus");
+        //console.log("remove in focus");
         //add infocus class
-        //console.log("great grandparent", $(this).parent().parent().parent());
-        console.log($("#remove-button:focus").parent().parent().parent().html());
+        ////console.log("great grandparent", $(this).parent().parent().parent());
+        //console.log($("#remove-button:focus").parent().parent().parent().html());
         $("#remove-button:focus").parent().parent().parent().remove();
     });
     $(document).on('focus', '#add-button', ()=>{
         
     });
     $(document).on('blur', '.task', ()=>{
-        console.log("remove blur");
+        //console.log("remove blur");
         //add infocus class
-        //console.log("great grandparent", $(this).parent().parent().parent());
-        console.log($(".task:focus"));
+        ////console.log("great grandparent", $(this).parent().parent().parent());
+        //console.log($(".task:focus"));
     });
         
 });
@@ -371,7 +398,7 @@ function removeFocussedContent(){
     var description = $("#description:focus").val();
     $(".task:focus").remove();
     removeTaskFromRoutineArray();
-    console.log("removed task. this is the new length", board.data.length);
+    //console.log("removed task. this is the new length", board.data.length);
 
     if(board.data.length == 0){
         showUploadInfo();
@@ -402,10 +429,10 @@ function toNormalTime(raw_date) {
     //returned: 1:00 PM
     //relies on raw_date always being 4 long
     if(raw_date.length != 4){
-      console.error("malformatted input");
+      //console.error("malformatted input");
     }
     var date = raw_date.substring(0, 2) + ":" + raw_date.substring(2, 4);
-    //console.log("date", date);
+    ////console.log("date", date);
     //added an hour and minute separator
     date = date + ":00";
     date = "April 27, 2017 "+date;
@@ -458,7 +485,7 @@ function appendContent(){
 $(document).on('keyup', function(e) {
     if(e.which == 8){
         //backspace
-        console.log("backspace");
+        //console.log("backspace");
         
         if($(".task").is(":focus")){
             removeFocussedContent();
@@ -468,10 +495,10 @@ $(document).on('keyup', function(e) {
     if(e.which == 13) {
         //enter
         if($(".current-task").is(":focus" || $("#description").is(":focus"))){
-            console.log("exectuting enter");
+            //console.log("exectuting enter");
             appendContent();
         }
-        console.log("enter key pressed");
+        //console.log("enter key pressed");
         
     }
 });
