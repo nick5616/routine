@@ -26,6 +26,9 @@ body{
 label{
     display: inline-block;
 }
+.custom-div-btn:focus{
+    
+}
 .custom-tf{
     background-color: transparent; 
     border: none;
@@ -54,8 +57,11 @@ label{
 }
 .custom-div-btn:focus{
     border: 2px dashed black;
-    outline: none;
 }
+.hidden{
+    display: none;
+}
+
 .upload-button:focus{
     border: 5px dashed black;
     outline: none;
@@ -75,6 +81,10 @@ label{
     /*box-shadow: 0 0 3px #222222;*/
     padding: 2px 5px;
     margin: 0 5px;
+    
+}
+.custom-div-btn:hover{
+    cursor: pointer;
 }
 .task .custom-div-btn{
     display: contents;

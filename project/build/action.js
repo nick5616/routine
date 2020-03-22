@@ -116,6 +116,10 @@ function getCapitalizedWord(string){
     return new_string;
 }
 function capitalizeSentence(sentence){
+    if(sentence.length == 0){
+        console.log("empty sentence", sentence);
+        return "";
+    }
     var words = sentence.split(" ");
     var new_words = [];
     words.forEach((current_word)=>{
@@ -154,7 +158,8 @@ function addTaskToDisplay(task){
                 '<div class = "task-item"></div>'+
             '</div>'+
             '<div class="col">'+
-                '<button class = "custom-div-btn" tabindex="0" id = "remove-button"> <i class="fas fa-minus-circle"></i> Remove </button>'+
+                //'<button class = "custom-div-btn" tabindex="0" id = "remove-button"> <i class="fas fa-minus-circle"></i> Remove </button>'+
+                '<div class = "remove-instructions hidden">Press Backspace to Remove</div>'+
             '</div>'+
         '</div>'+
         '</div>';
@@ -174,7 +179,8 @@ function addTaskToDisplay(task){
                     '<div class = "task-item dynamic">'+toNormalTime(task.end)+'</div>'+
                 '</div>'+
                 '<div class="col">'+
-                    '<button class = "custom-div-btn dynamic" tabindex="0" id = "remove-button"> <i class="fas fa-minus-circle"></i> Remove </button>'+
+                    //'<button class = "custom-div-btn dynamic" tabindex="0" id = "remove-button"> <i class="fas fa-minus-circle"></i> Remove </button>'+
+                    '<div class = "remove-instructions hidden">Press Backspace to Remove</div>'+    
                 '</div>'+
             '</div>'+
         '</div>';
@@ -260,6 +266,8 @@ function updateUI(){
     else {
         //console.log("current_method not selected");
     }
+    $(".paragraph").empty();
+    $(".paragraph").text(generateParagraph());
 }
 function inside(time, beginning, end){
     var t = parseInt(time);
@@ -284,10 +292,14 @@ function getCurrentTasks(){
     return current_tasks;
 }
 function applyColorScheme(){
-    var colors = generateTwoHighContrastColors();
+    var colors = generateAnalogousColorScheme();
     //console.log("colors", colors);
     
     $(".background").css("color", colorArrayToString(colors[0]));
+    $(".custom-div-btn").css("border", "1px solid "+colorArrayToString(colors[0]));
+    $(".current-task").css("border", "1px solid "+colorArrayToString(colors[0]));
+    $(".current-tf").css("border-bottom", "2px solid "+colorArrayToString(colors[0]));
+    $(".current-tf:focus").css("border", "2px dashed "+colorArrayToString(colors[0]));
     $(".dynamic").css("color", colorArrayToString(colors[0]));
     $(".background").css("background", colorArrayToString(colors[1]));
 }
@@ -302,17 +314,291 @@ function contrast_ratio(lum1, lum2){
 function generateTwoHighContrastColors(){
     var color1 = generateRandomColor();
     var color2 = generateRandomColor();
-    while(contrast_ratio(relative_luminance(color1), relative_luminance(color2)) < 3){
+    while(contrast_ratio(relative_luminance(color1), relative_luminance(color2)) < 4.5){
+        //above 3 is wcag compliant
         color1 = generateRandomColor();
         //color2 = generateRandomColor();
     }
     return [color1, color2];
 }
-
-$(document).ready(function(){
-    if(routineIsEmpty) {
-        hideTutorial();
+function rgb_to_hsl(rgb){
+    var r = rgb[0];
+    var g = rgb[1];
+    var b = rgb[2];
+    // Make r, g, and b fractions of 1
+    r /= 255;
+    g /= 255;
+    b /= 255;
+  
+    // Find greatest and smallest channel values
+    let cmin = Math.min(r,g,b),
+        cmax = Math.max(r,g,b),
+        delta = cmax - cmin,
+        h = 0,
+        s = 0,
+        l = 0;
+    // Calculate hue
+    // No difference
+    if (delta == 0)
+      h = 0;
+    // Red is max
+    else if (cmax == r)
+      h = ((g - b) / delta) % 6;
+    // Green is max
+    else if (cmax == g)
+      h = (b - r) / delta + 2;
+    // Blue is max
+    else
+      h = (r - g) / delta + 4;
+  
+    h = Math.round(h * 60);
+      
+    // Make negative hues positive behind 360°
+    if (h < 0)
+        h += 360;
+    // Calculate lightness
+    l = (cmax + cmin) / 2;
+  
+    // Calculate saturation
+    s = delta == 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
+      
+    // Multiply l and s by 100
+    s = +(s * 100).toFixed(1);
+    l = +(l * 100).toFixed(1);
+  
+    return [h, s, l];
+  }
+  function hsl_to_rgb(hsl){
+    // Must be fractions of 1
+    var h = hsl[0];
+    var s = hsl[1];
+    var l = hsl[2];
+  
+    s /= 100;
+    l /= 100;
+  
+    let c = (1 - Math.abs(2 * l - 1)) * s,
+        x = c * (1 - Math.abs((h / 60) % 2 - 1)),
+        m = l - c/2,
+        r = 0,
+        g = 0,
+        b = 0;
+    if (0 <= h && h < 60) {
+      r = c; g = x; b = 0;
+    } else if (60 <= h && h < 120) {
+      r = x; g = c; b = 0;
+    } else if (120 <= h && h < 180) {
+      r = 0; g = c; b = x;
+    } else if (180 <= h && h < 240) {
+      r = 0; g = x; b = c;
+    } else if (240 <= h && h < 300) {
+      r = x; g = 0; b = c;
+    } else if (300 <= h && h < 360) {
+      r = c; g = 0; b = x;
     }
+    r = Math.round((r + m) * 255);
+    g = Math.round((g + m) * 255);
+    b = Math.round((b + m) * 255);
+  
+    return [r, g, b];
+  }
+  function generateGreeting(){
+    var time = getCurrentMilitaryTime();
+    //var time = "0000";
+    var timeInt = parseInt(time);
+    var str = "";
+    if(timeInt == 2400) timeInt = 0;
+    //6 AM to 12 PM morning
+    if(timeInt < 601){
+      str = "Late night or early morning? ";
+    }
+    else if(timeInt < 1201){
+      str = "Good morning! ";
+    }
+    else if(timeInt < 1800){
+      str = "Good afternoon! ";
+    }
+    else{
+      str = "Good evening! ";
+    }
+    return str;
+  }
+  function generateParagraph(){
+    var time_info = "";
+    var type = generateTimeType(getCurrentMilitaryTime());
+    switch(type){
+      case "day":
+        time_info = "The background of the page is bright. ";
+        break;
+      case "change":
+        time_info = "The background of the page is neither dark nor bright. ";
+        break;
+      case "night":
+        time_info = "The background of the page is dark. ";
+        break;
+    }
+    var num_tasks = "You have "+getAllTasks().length+" tasks on your routine, and "+getCurrentTasks().length + " right now. ";
+    return generateGreeting() + time_info + num_tasks;
+  }
+  function generateTimeType(t){
+    var type = "";
+    if(t == "2400"){
+      t = "0000";
+    }
+    if(parseInt(t) < 1200){
+      console.log("AM");
+      //AM
+      if(t.startsWith("06")){
+        //sunrise
+        console.log("sunrise");
+        type = "change";
+      }
+      else if(parseInt(t) > 659){
+        //daytime
+        type = "day";
+      }
+      else {
+        //late night
+        type = "night";
+      }
+    }
+    else {
+      //PM
+      if(t.startsWith("18")){
+        //sunset
+        type = "change";
+      }
+      else if(parseInt(t) > 1859){
+        //night time
+        type = "night";
+      }
+      else {
+        //day time
+        type = "day";
+      }
+    }
+    return type;
+  }
+  function generateBounds(t){
+    var upper = 255
+    var lower = 0;
+    var type = generateTimeType(t);
+    if(type == "day"){
+      lower = 141;
+      upper = 255;
+    }
+    else if(type == "change"){
+      lower = 100;
+      upper = 140;
+    }
+    else {
+      lower = 0;
+      upper = 99;
+    }
+    console.log("lower bound",lower);
+    console.log("upper bound", upper);
+    return [lower, upper];
+  }
+  function generateBackgroundColor(){
+    /*
+    Things to consider:
+      time of day
+    
+    */
+    
+    
+    var time = getCurrentMilitaryTime();
+    
+    //var time = "2000";
+    [lower_bound, upper_bound] = generateBounds(time);
+    var r, g, b;
+    var colorArray = [r, g, b];
+    for(var i = 0; i < colorArray.length; i++){
+      colorArray[i] = Math.floor(Math.random() * (upper_bound - lower_bound)) + lower_bound;
+    }
+      
+    return colorArray;
+  }
+
+function getAnalogousColor(hsl){
+    console.log("color before hue shift", hsl);
+    var oneOrZero = Math.round(Math.random());
+    if(oneOrZero == 0){
+        hsl[0] = (hsl[0] + 30);
+        if(hsl[0] > 360) {
+            hsl[0] -= 360;
+        }
+    }
+    else {
+        hsl[0] = (hsl[0] - 30);
+        if(hsl[0] > 360) {
+            hsl[0] -= 360;
+        }
+    }
+    
+    console.log("color after hue shift", hsl);
+    return [hsl[0], hsl[1], hsl[2]];
+  }
+  
+  function satisfactoryContrastRatio(rgbColor1, rgbColor2){
+    return contrast_ratio(relative_luminance(rgbColor1), relative_luminance(rgbColor2)) >= 4.5;
+  }
+  function lightenColor(color){
+    color[2] += 10;
+    if(color[2] > 100) {
+      color = 100;
+    }
+    return color;
+  }
+  function darkenColor(color){
+    color[2] -= 10;
+    if(color[2] < 0) {
+      color = 0;
+    }
+    return color;
+  }
+  function generateAnalogousColorScheme(){
+    //123, 20, 45
+    var accessible = true;
+    var background_color = generateBackgroundColor();
+    console.log("background color rgb", background_color);
+    var bg_color_hsl = rgb_to_hsl(background_color);
+    console.log("background color hsl", bg_color_hsl);
+    var analogous_color = getAnalogousColor(bg_color_hsl);
+    //var analogous_color_rgb = hsl_to_rgb(analogous_color);
+    while(!satisfactoryContrastRatio(hsl_to_rgb(analogous_color), background_color)){
+      console.log("background lightness", bg_color_hsl[2]);
+      console.log("color lightness", analogous_color);
+      if(bg_color_hsl[2] < 50){
+        console.log("lightening foreground");
+        if(analogous_color[2] <= 90) analogous_color = lightenColor(analogous_color);
+        else{
+            console.log("NOT ACCESSIBLE??");
+            analogous_color[2] = 100;
+            var cr = contrast_ratio(relative_luminance(hsl_to_rgb(analogous_color)), relative_luminance(hsl_to_rgb(background_color)));
+            console.log("contrast RATIO", cr)
+            if(cr < 4.5) accessible = false;
+            break;
+        }
+      }
+      else {
+        console.log("darkening foreground");
+        if(analogous_color[2] > 10) analogous_color = darkenColor(analogous_color);
+        else {
+            console.log("NOT ACCESSIBLE??");
+            analogous_color[2] = 0;
+            var cr = contrast_ratio(relative_luminance(hsl_to_rgb(analogous_color)), relative_luminance(hsl_to_rgb(background_color)));
+            console.log("contrast RATIO", cr);
+            if(cr < 4.5) accessible = false;
+            break;
+        }
+      }
+    }
+    console.log("hsl of complete foreground color", analogous_color);
+    if(!accessible) return [[241, 166, 149], [119, 16, 49]];
+    return [hsl_to_rgb(analogous_color), background_color];
+  }
+$(document).ready(function(){
     
     $("#now-tasks").removeClass("toggled-button");
     $("#all-tasks").addClass("toggled-button");
@@ -321,10 +607,12 @@ $(document).ready(function(){
     applyColorScheme();
     setInterval(function() {
         //console.log("time has passed");
+        applyColorScheme();
         updateUI();
-    }, 5 * 1000);
+    }, 60 * 1000);
 
     updateUI();
+
      // 60 * 1000 milsec
     /*$("input").change(function(){
         alert("The text has been changed.");
@@ -347,6 +635,7 @@ $(document).ready(function(){
         $(this).remove();
         //$(task).remove();
     });
+    
     $(document).on('focus', '#remove-button', ()=>{
         //console.log("remove in focus");
         //add infocus class
@@ -354,8 +643,14 @@ $(document).ready(function(){
         //console.log($("#remove-button:focus").parent().parent().parent().html());
         $("#remove-button:focus").parent().parent().parent().remove();
     });
-    $(document).on('focus', '#add-button', ()=>{
-        
+    $(document).on('click', '#add-button', ()=>{
+        appendContent();
+    });
+    $(document).on('focus', '.task', ()=>{
+        $(this).closest(".remove-instructions").removeClass("hidden");
+    });
+    $(document).on('blur', '.task', ()=>{
+        $(this).closest(".remove-instructions").addClass("hidden");
     });
     $(document).on('blur', '.task', ()=>{
         //console.log("remove blur");
@@ -375,7 +670,9 @@ function getNewTaskEnd(){
     return $("#end").val();
 }
 function getNewTask(){
-    return new task(getNewTaskDescription(), toMilitaryTime(getNewTaskStart()), toMilitaryTime(getNewTaskEnd()));
+    var t = new task(getNewTaskDescription(), toMilitaryTime(getNewTaskStart()), toMilitaryTime(getNewTaskEnd()));
+    console.log("this is the task", t);
+    return t;
 }
 function clearAddTask(){
     $("#description").val("");
@@ -477,9 +774,13 @@ function showRoutineHeading(){
 function appendContent(){
     //to do: replace this with insert task and do a variant of insertion sort
     var new_task = getNewTask();
-    board.data.push(new_task);
-    updateUI();
-    clearAddTask();
+    if(new_task.desc.length != 0){
+        board.data.push(new_task);
+        updateUI();
+        clearAddTask();
+    }
+    
+    
 }
 
 $(document).on('keyup', function(e) {
@@ -494,7 +795,7 @@ $(document).on('keyup', function(e) {
 
     if(e.which == 13) {
         //enter
-        if($(".current-task").is(":focus" || $("#description").is(":focus"))){
+        if($("#add-button").is(":focus" || $("#description").is(":focus"))){
             //console.log("exectuting enter");
             appendContent();
         }
