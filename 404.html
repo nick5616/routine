@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.0.0/lib/p5.js"></script>
+    <!--script src = "background.js"></script-->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <!-- Popper JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <script src="https://kit.fontawesome.com/9b88f7a108.js"></script>
+    <script src = "action.js"></script>
+    <script src = "color-gen.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>Routine</title>
+</head>
+<body>
+    <div class = "background">
+        <div class = "wrapper">
+            <div class = "routine-holder">
+                <h1 class = "routine-heading"><!--input class = "heading-tf" placeholder = "Your Name"></input>'s--> Routine</h1>
+                <!--h2 class = "tutorial-heading">Enter Your First Task</h2-->
+                <div class = "paragraph" >
+
+                </div>
+                <hr/>
+                <div class = "routine">
+                    
+                </div>
+                <hr/>
+                <h2>Add a Task</h2>
+                <div class = "current-task" tabindex = "0">
+                    <div class="row">
+                        <div class="col-s-2">
+                            <label for="description">Description</label>
+                            <input class = "custom-tf description current-tf dynamic" id = "description" placeholder=""></input>
+                        </div>
+                        
+                        <div class="col-s-8">
+                            <label for="start">Start</label>
+                            <input class = "custom-tf start current-tf dynamic" id = "start" placeholder=""></input>
+                            <label for="end">End</label>
+                            <input class = "custom-tf end current-tf dynamic" id = "end" placeholder=""></input>
+                        </div>
+                        <div class = "col-s-2">
+                            <button class = "custom-div-btn prim dynamic" id = "add-button" tabindex="0"> <i class="fas fa-plus-circle"></i> Add </button>
+                        </div>
+                    </div>
+                </div>
+                <hr/>
+                <h2>Show Me</h2>
+                <div class="row">
+                    <div class="col-s-3">
+                        <div class = "custom-div-btn prim" id = "now-tasks" tabindex="0" ><i class="fas fa-clock"></i> Tasks Happening Now</div>
+                    </div>
+                    <div class="col-s-3">
+                        <div class = "custom-div-btn prim" id = "all-tasks" tabindex="0" ><i class="fas fa-globe-americas"></i> All Tasks</div>
+                    </div>
+                </div>
+                
+                <!--div class = "custom-div-btn">Export Routine</div-->
+                
+                
+            </div>
+        </div>
+    </div>
+</body>
+</html>
