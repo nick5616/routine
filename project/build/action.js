@@ -295,13 +295,13 @@ function applyColorScheme(){
     var colors = generateAnalogousColorScheme();
     //console.log("colors", colors);
     
-    $(".background").css("color", colorArrayToString(colors[0]));
+    $("body").css("color", colorArrayToString(colors[0]));
     $(".custom-div-btn").css("border", "1px solid "+colorArrayToString(colors[0]));
     $(".current-task").css("border", "1px solid "+colorArrayToString(colors[0]));
     $(".current-tf").css("border-bottom", "2px solid "+colorArrayToString(colors[0]));
     $(".current-tf:focus").css("border", "2px dashed "+colorArrayToString(colors[0]));
     $(".dynamic").css("color", colorArrayToString(colors[0]));
-    $(".background").css("background", colorArrayToString(colors[1]));
+    $("body").css("background", colorArrayToString(colors[1]));
 }
 function contrast_ratio(lum1, lum2){
     var l1 = Math.max(lum1, lum2);
