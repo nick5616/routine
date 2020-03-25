@@ -40,16 +40,24 @@
                     <div class="row">
                         <div class="col-s-2">
                             <label for="description">Description</label>
-                            <input class = "custom-tf description current-tf dynamic" id = "description" placeholder=""></input>
+                            <input class = "custom-tf description current-tf dynamic" id = "description"></input>
                         </div>
                         
                         <div class="col-s-8">
                             <label for="start">Start</label>
-                            <input class = "custom-tf start current-tf dynamic" id = "start" placeholder=""></input>
+                            <input class = "custom-tf start current-tf dynamic" id = "start"></input>
+                            <select class="custom-select custom-sl" id="select-start">
+                                <option selected value="1">AM</option>
+                                <option value="2">PM</option>
+                            </select>
                             <label for="end">End</label>
-                            <input class = "custom-tf end current-tf dynamic" id = "end" placeholder=""></input>
+                            <input class = "custom-tf end current-tf dynamic" id = "end"></input>
+                            <select class="custom-select custom-sl" id="select-end">
+                                <option selected class = "selected" value = "1">AM</option>
+                                <option value="2">PM</option>
+                            </select>
                         </div>
-                        <div class = "col-s-2">
+                        <div class = "col">
                             <button class = "custom-div-btn prim dynamic" id = "add-button" tabindex="0"> <i class="fas fa-plus-circle"></i> Add </button>
                         </div>
                     </div>

@@ -191,6 +191,14 @@ h3{
 
 }
 */
+.custom-sl{
+    width: 5vw;
+    background-color: inherit;
+}
+
+.task{
+    font-size: 10pt;
+}
 body{
     /*background-image: url("handh.png");*/
     background-color: white;

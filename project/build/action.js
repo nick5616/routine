@@ -301,6 +301,8 @@ function applyColorScheme(){
     $(".current-tf").css("border-bottom", "2px solid "+colorArrayToString(colors[0]));
     $(".current-tf:focus").css("border", "2px dashed "+colorArrayToString(colors[0]));
     $(".dynamic").css("color", colorArrayToString(colors[0]));
+    $(".custom-sl").css("border", "1px solid "+colorArrayToString(colors[0]));
+    $(".custom-sl").css("color", colorArrayToString(colors[0]));
     $("body").css("background", colorArrayToString(colors[1]));
 }
 function contrast_ratio(lum1, lum2){
@@ -607,7 +609,7 @@ $(document).ready(function(){
     applyColorScheme();
     setInterval(function() {
         //console.log("time has passed");
-        applyColorScheme();
+        //applyColorScheme();
         updateUI();
     }, 60 * 1000);
 
@@ -637,10 +639,7 @@ $(document).ready(function(){
     });
     
     $(document).on('focus', '#remove-button', ()=>{
-        //console.log("remove in focus");
-        //add infocus class
-        ////console.log("great grandparent", $(this).parent().parent().parent());
-        //console.log($("#remove-button:focus").parent().parent().parent().html());
+        
         $("#remove-button:focus").parent().parent().parent().remove();
     });
     $(document).on('click', '#add-button', ()=>{
@@ -666,13 +665,59 @@ function getNewTaskDescription(){
 function getNewTaskStart(){
     return $("#start").val();
 }
+function getNewTaskStartPeriod(){
+  return $("#select-start").val();
+}
 function getNewTaskEnd(){
     return $("#end").val();
 }
+function getNewTaskEndPeriod(){
+  return $("#select-end").val();
+}
+function processTimings(raw_time, period_val){
+  var time_split = raw_time.split(":");
+  var time_string = "";
+  var period = "";
+  if(period_val == 1){
+    //AM
+    period = "AM";
+  }
+  else {
+    //PM
+    period = "PM";
+  }
+  if(time_split.length == 1){
+    //just hours
+    time_string = time_split[0] + ":00 " + period;
+  }
+  else if(time_split.length == 2){
+    //hours and mins
+    time_string = time_split[0] + ":"+time_split[1]+" " + period;
+  }
+  else {
+    console.error("malformed time entered from front end");
+  }
+  console.log("TIME STRING:" + time_string);
+  return time_string;
+}
 function getNewTask(){
-    var t = new task(getNewTaskDescription(), toMilitaryTime(getNewTaskStart()), toMilitaryTime(getNewTaskEnd()));
-    console.log("this is the task", t);
-    return t;
+  var t_desc = getNewTaskDescription();
+  var t_start_hour = getNewTaskStart();
+  var t_start_period = getNewTaskStartPeriod();
+  var t_end_hour = getNewTaskEnd();
+  var t_end_period = getNewTaskEndPeriod();
+  console.log("desc:"+t_desc);
+  console.log("s h:"+t_start_hour);
+  console.log("s p:"+t_start_period);
+  console.log("e h:"+t_end_hour);
+  console.log("e p:"+t_end_period);
+  var t_start_time = processTimings(t_start_hour, t_start_period);
+  console.log(t_start_time);
+  var t_end_time = processTimings(t_end_hour, t_end_period);
+  console.log(t_end_time);
+  var t = new task(t_desc, toMilitaryTime(t_start_time), toMilitaryTime(t_end_time));
+  console.log("this is the task", t);
+  return t;
 }
 function clearAddTask(){
     $("#description").val("");
@@ -798,6 +843,14 @@ $(document).on('keyup', function(e) {
         if($("#add-button").is(":focus" || $("#description").is(":focus"))){
             //console.log("exectuting enter");
             appendContent();
+        }
+        if($("#now-tasks").is(":focus" || $("#description").is(":focus"))){
+          //console.log("exectuting enter");
+          displayNowTasks();
+        }
+        if($("#all-tasks").is(":focus" || $("#description").is(":focus"))){
+          //console.log("exectuting enter");
+          displayAllTasks();
         }
         //console.log("enter key pressed");
         
