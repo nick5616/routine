@@ -20,6 +20,7 @@ class routine {
 }
 
 var display_mode = "All";
+var colorScheme = generateAnalogousColorScheme();
 function routineIsEmpty(){
     return $(".routine").is(":empty");
 }
@@ -107,7 +108,8 @@ function setElemsPrimaryColor(){
 }
 function getCurrentMilitaryTime(){
     var date = new Date();
-    return date.getHours().toString()+date.getMinutes().toString();
+    //return date.getHours().toString()+date.getMinutes().toString();
+    return "1901";
 }
 function getCapitalizedWord(string){ 
     var new_char = string[0].toUpperCase();
@@ -291,8 +293,8 @@ function getCurrentTasks(){
     });
     return current_tasks;
 }
-function applyColorScheme(){
-    var colors = generateAnalogousColorScheme();
+function applyColorScheme(colors){
+    //var colors = generateAnalogousColorScheme();
     //console.log("colors", colors);
     
     $("body").css("color", colorArrayToString(colors[0]));
@@ -600,19 +602,72 @@ function getAnalogousColor(hsl){
     if(!accessible) return [[241, 166, 149], [119, 16, 49]];
     return [hsl_to_rgb(analogous_color), background_color];
   }
+  function isSunrise(){
+    var time_string = getCurrentMilitaryTime();
+    var time = parseInt(time_string);
+    return time > 559 && time < 659;
+  }
+  function isSunset(){
+    var time_string = getCurrentMilitaryTime();
+    var time = parseInt(time_string);
+    return time > 1759 && time < 1859;
+  }
+  
+  function darkenUI(){
+    /*
+    colorScheme[0][0] -= 3;
+    colorScheme[0][1] -= 3;
+    colorScheme[0][2] -= 3;
+    */
+    colorScheme[1][0] -= 2;
+    colorScheme[1][1] -= 2;
+    colorScheme[1][2] -= 2;
+    var foreground = generate
+    applyColorScheme(colorScheme);
+  }
+  function lightenUI(){
+    colorScheme[0][0] -= 3;
+    colorScheme[0][1] -= 3;
+    colorScheme[0][2] -= 3;
+    colorScheme[1][0] += 2;
+    colorScheme[1][1] += 2;
+    colorScheme[1][2] += 2;
+    applyColorScheme(colorScheme);
+  }
+
+  /*
+  KNOWN ISSUE: DARKER COLORS BECOME MORE LUMINANT THAN LIGHTER COLORS AS YOU LIGHTEN THEM BY THE SAME AMOUNT
+  AS A RESULT, THE CONTRAST RATIO (BASED ON THE RATIO OF THE LUMINANCE OF TWO COLORS) GETS SMALLER, SO THE PAGE
+  BECOMES HARDER TO READ. 
+  */
+  function ageUI(){
+    if(isSunrise()){
+      console.log("sunrise, lightening");
+      lightenUI();
+    }
+    else if(isSunset()){
+      console.log("sunset, darkening");
+      darkenUI();
+    }
+  }
 $(document).ready(function(){
     
     $("#now-tasks").removeClass("toggled-button");
     $("#all-tasks").addClass("toggled-button");
     $("#now-tasks").removeClass("prim");
     $("#all-tasks").addClass("prim");
-    applyColorScheme();
+    
+    applyColorScheme(colorScheme);
     setInterval(function() {
         //console.log("time has passed");
         //applyColorScheme();
         updateUI();
-    }, 60 * 1000);
-
+    }, 10 * 1000);
+    setInterval(function() {
+      //console.log("time has passed");
+      //applyColorScheme();
+      ageUI();
+  }, 50 * 1000);
     updateUI();
 
      // 60 * 1000 milsec

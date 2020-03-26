@@ -38,18 +38,19 @@
                 <h2>Add a Task</h2>
                 <div class = "current-task" tabindex = "0">
                     <div class="row">
-                        <div class="col-s-2">
+                        <div class="col-s-12 col-lg-4">
                             <label for="description">Description</label>
-                            <input class = "custom-tf description current-tf dynamic" id = "description"></input>
+                            <input class = "custom-tf description current-tf dynamic" id = "description"></input>                            
                         </div>
-                        
-                        <div class="col-s-8">
+                        <div class = "col-s-5 col-lg-3">
                             <label for="start">Start</label>
                             <input class = "custom-tf start current-tf dynamic" id = "start"></input>
                             <select class="custom-select custom-sl" id="select-start">
                                 <option selected value="1">AM</option>
                                 <option value="2">PM</option>
                             </select>
+                        </div>
+                        <div class = "col-s-5 col-lg-3">
                             <label for="end">End</label>
                             <input class = "custom-tf end current-tf dynamic" id = "end"></input>
                             <select class="custom-select custom-sl" id="select-end">
@@ -57,7 +58,7 @@
                                 <option value="2">PM</option>
                             </select>
                         </div>
-                        <div class = "col">
+                        <div class = "col-s-6 col-lg-2">
                             <button class = "custom-div-btn prim dynamic" id = "add-button" tabindex="0"> <i class="fas fa-plus-circle"></i> Add </button>
                         </div>
                     </div>
