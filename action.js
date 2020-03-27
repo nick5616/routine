@@ -21,95 +21,57 @@ class routine {
 
 var display_mode = "All";
 var colorScheme = generateAnalogousColorScheme();
-function routineIsEmpty(){
-    return $(".routine").is(":empty");
-}
+var board = new routine();
+
 function relative_luminance(colorArray8Bit){
-    var r, g, b;
-    var l;
-    var standard_red = colorArray8Bit[0]/255;
-    var standard_green = colorArray8Bit[1]/255;
-    var standard_blue = colorArray8Bit[2]/255; 
-    //console.log("sR", standard_red);
-    //console.log("sG", standard_green);
-    //console.log("sB", standard_blue);
-    ////console.log(standard_red);
-    if(standard_red <= 0.03928){
-      //console.log("path 1");
-      r = standard_red/12.92;
-    }
-    else {
-      
-      r = Math.pow(((standard_red+0.055)/1.055), 2.4);
-  
-    }
-  
-    if(standard_green <= 0.03928){
-      //console.log("path 1");
-      g = standard_green/12.92;
-    }
-    else {
-      g= Math.pow(((standard_green+0.055)/1.055), 2.4);
-    }
-  
-    if(standard_blue <= 0.03928){
-      //console.log("path 1");
-      b = standard_blue/12.92;
-    }
-    else {
-      b = Math.pow(((standard_blue+0.055)/1.055), 2.4);
-    }
-    //console.log("R", r);
-    //console.log("G", g);
-    //console.log("B", b);
-    l = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-    //console.log("L", l);
-    //console.log(typeof l);
-    return l;
-}
+  var r, g, b;
+  var l;
+  var standard_red = colorArray8Bit[0]/255;
+  var standard_green = colorArray8Bit[1]/255;
+  var standard_blue = colorArray8Bit[2]/255; 
+  //console.log("sR", standard_red);
+  //console.log("sG", standard_green);
+  //console.log("sB", standard_blue);
+  ////console.log(standard_red);
+  if(standard_red <= 0.03928){
+    //console.log("path 1");
+    r = standard_red/12.92;
+  }
+  else {
+    
+    r = Math.pow(((standard_red+0.055)/1.055), 2.4);
 
-function generateRandomColor(){
-    //console.log("generating primary color");
-    var red = Math.floor(Math.random() * 255);
-    var green = Math.floor(Math.random() * 255);
-    var blue = Math.floor(Math.random() * 255);
-    return [red, green, blue];
-}
+  }
 
+  if(standard_green <= 0.03928){
+    //console.log("path 1");
+    g = standard_green/12.92;
+  }
+  else {
+    g= Math.pow(((standard_green+0.055)/1.055), 2.4);
+  }
+
+  if(standard_blue <= 0.03928){
+    //console.log("path 1");
+    b = standard_blue/12.92;
+  }
+  else {
+    b = Math.pow(((standard_blue+0.055)/1.055), 2.4);
+  }
+  l = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  return l;
+}
+function accessibleContrastRatio(){
+
+}
 function colorArrayToString(array){
     return "rgb("+array[0]+","+array[1]+","+array[2]+")";
 };
 
-function generateBackgroundColor(){
-    var sunrise = [255, 219, 0];
-    var color_string = "background: linear-gradient(0deg, rgba(0,241,254,1) 0%, rgba(205,245,249,1) 100%)";
-    var color_array = [0,241,254];
-    
-    return [color_string, color_array];
-}
-  
-function generateColorScheme(){
-    var background_color = generateBackgroundColor();
-    var background_color_luminance = relative_luminance(background_color[1]);
-    var color = generateRandomColor();
-    //console.log("primary color's rel lum", relative_luminance(primar))
-    while(Math.abs(relative_luminance(color) - background_color_luminance) < 0.5){
-        //console.log("relative_luminance is", relative_luminance(color));
-        color = generateRandomColor();
-        //secondary_color = generateRandomColor();
-    }
-    console.log("relative_luminance is", relative_luminance(color));
-    return [color, background_color[0]];
-}
-function setElemsPrimaryColor(){
-    var primary_color = generateRandomColor();
-    ////console.log("color: ",primary_color);
-    $(".prim").css("background-color",primary_color);
-}
 function getCurrentMilitaryTime(){
     var date = new Date();
     //return date.getHours().toString()+date.getMinutes().toString();
-    return "1901";
+    return "0601";
 }
 function getCapitalizedWord(string){ 
     var new_char = string[0].toUpperCase();
@@ -129,22 +91,7 @@ function capitalizeSentence(sentence){
     })
     return new_words.join(" ");
 }
-/*
-function customizeHeading(){
 
-}
-function customizePage(){
-    customizeHeading();
-}
-*/
-//customizePage();
-one = new task("brush teeth", "2248", "2250");
-two = new task("shower", "2249", "2300");
-three = new task("eat crayon", "0002", "1200");
-var board = new routine();
-//board.data.push(one);
-//board.data.push(two);
-//board.data.push(three);
 function addTaskToDisplay(task){
     if(task.start == "0000" && task.end == "0000"){
         //console.log("timeless task");
@@ -250,11 +197,6 @@ function displayNowTasks(){
     updateUI();
 }
 
-function insertTask(task){
-    //insert the task in the right spot
-    
-}
-
 function updateUI(){
     clearDisplay();
     if(display_mode == "All"){
@@ -315,16 +257,6 @@ function contrast_ratio(lum1, lum2){
     return cr;
 }
 
-function generateTwoHighContrastColors(){
-    var color1 = generateRandomColor();
-    var color2 = generateRandomColor();
-    while(contrast_ratio(relative_luminance(color1), relative_luminance(color2)) < 4.5){
-        //above 3 is wcag compliant
-        color1 = generateRandomColor();
-        //color2 = generateRandomColor();
-    }
-    return [color1, color2];
-}
 function rgb_to_hsl(rgb){
     var r = rgb[0];
     var g = rgb[1];
@@ -614,24 +546,21 @@ function getAnalogousColor(hsl){
   }
   
   function darkenUI(){
-    /*
-    colorScheme[0][0] -= 3;
-    colorScheme[0][1] -= 3;
-    colorScheme[0][2] -= 3;
-    */
-    colorScheme[1][0] -= 2;
-    colorScheme[1][1] -= 2;
-    colorScheme[1][2] -= 2;
-    var foreground = generate
+    var background_color = colorScheme[1];
+    var foreground_color = colorScheme[0];
+    background_color[0] -= 2;
+    background_color[1] -= 2;
+    background_color[2] -= 2;
+    colorScheme = [foreground_color,  background_color];
     applyColorScheme(colorScheme);
   }
   function lightenUI(){
-    colorScheme[0][0] -= 3;
-    colorScheme[0][1] -= 3;
-    colorScheme[0][2] -= 3;
-    colorScheme[1][0] += 2;
-    colorScheme[1][1] += 2;
-    colorScheme[1][2] += 2;
+    var background_color = colorScheme[1];
+    var foreground_color = colorScheme[0];
+    background_color[0] += 2;
+    background_color[1] += 2;
+    background_color[2] += 2;
+    colorScheme = [foreground_color,  background_color];
     applyColorScheme(colorScheme);
   }
 
@@ -667,7 +596,7 @@ $(document).ready(function(){
       //console.log("time has passed");
       //applyColorScheme();
       ageUI();
-  }, 50 * 1000);
+  }, 50 * 10);
     updateUI();
 
      // 60 * 1000 milsec
