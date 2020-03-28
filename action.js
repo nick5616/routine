@@ -61,8 +61,8 @@ function relative_luminance(colorArray8Bit){
   l = 0.2126 * r + 0.7152 * g + 0.0722 * b;
   return l;
 }
-function accessibleContrastRatio(){
-
+function accessibleContrastRatio(scheme){
+  return contrast_ratio(relative_luminance(scheme[0]), relative_luminance(scheme[1])) >= 7.0;
 }
 function colorArrayToString(array){
     return "rgb("+array[0]+","+array[1]+","+array[2]+")";
@@ -70,8 +70,8 @@ function colorArrayToString(array){
 
 function getCurrentMilitaryTime(){
     var date = new Date();
-    //return date.getHours().toString()+date.getMinutes().toString();
-    return "0601";
+    return date.getHours().toString()+date.getMinutes().toString();
+    //return "1901";
 }
 function getCapitalizedWord(string){ 
     var new_char = string[0].toUpperCase();
@@ -248,6 +248,7 @@ function applyColorScheme(colors){
     $(".custom-sl").css("border", "1px solid "+colorArrayToString(colors[0]));
     $(".custom-sl").css("color", colorArrayToString(colors[0]));
     $("body").css("background", colorArrayToString(colors[1]));
+    //$("body").css("background", colorArrayToString(colors[1]));
 }
 function contrast_ratio(lum1, lum2){
     var l1 = Math.max(lum1, lum2);
@@ -477,7 +478,7 @@ function getAnalogousColor(hsl){
   }
   
   function satisfactoryContrastRatio(rgbColor1, rgbColor2){
-    return contrast_ratio(relative_luminance(rgbColor1), relative_luminance(rgbColor2)) >= 4.5;
+    return contrast_ratio(relative_luminance(rgbColor1), relative_luminance(rgbColor2)) >= 7;
   }
   function lightenColor(color){
     color[2] += 10;
@@ -531,7 +532,8 @@ function getAnalogousColor(hsl){
       }
     }
     console.log("hsl of complete foreground color", analogous_color);
-    if(!accessible) return [[241, 166, 149], [119, 16, 49]];
+    console.log("defaulting to pre-computed contrast ratio > 7 color scheme.")
+    if(!accessible) return [[28, 32, 3], [240, 189, 101]];
     return [hsl_to_rgb(analogous_color), background_color];
   }
   function isSunrise(){
@@ -552,7 +554,13 @@ function getAnalogousColor(hsl){
     background_color[1] -= 2;
     background_color[2] -= 2;
     colorScheme = [foreground_color,  background_color];
-    applyColorScheme(colorScheme);
+    if(accessibleContrastRatio(colorScheme)) {
+      applyColorScheme(colorScheme);
+    }
+    else {
+      colorScheme = generateAnalogousColorScheme();
+      applyColorScheme(colorScheme);
+    }
   }
   function lightenUI(){
     var background_color = colorScheme[1];
@@ -561,7 +569,13 @@ function getAnalogousColor(hsl){
     background_color[1] += 2;
     background_color[2] += 2;
     colorScheme = [foreground_color,  background_color];
-    applyColorScheme(colorScheme);
+    if(accessibleContrastRatio(colorScheme)) {
+      applyColorScheme(colorScheme);
+    }
+    else {
+      colorScheme = generateAnalogousColorScheme();
+      applyColorScheme(colorScheme);
+    }
   }
 
   /*
@@ -580,12 +594,6 @@ function getAnalogousColor(hsl){
     }
   }
 $(document).ready(function(){
-    
-    $("#now-tasks").removeClass("toggled-button");
-    $("#all-tasks").addClass("toggled-button");
-    $("#now-tasks").removeClass("prim");
-    $("#all-tasks").addClass("prim");
-    
     applyColorScheme(colorScheme);
     setInterval(function() {
         //console.log("time has passed");
@@ -596,7 +604,7 @@ $(document).ready(function(){
       //console.log("time has passed");
       //applyColorScheme();
       ageUI();
-  }, 50 * 10);
+  }, 50 * 1000);
     updateUI();
 
      // 60 * 1000 milsec
