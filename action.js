@@ -821,7 +821,6 @@ function appendContent(){
     catch(err) {
       alert("Enter your task's Description, Start time and End time!")
     }
-    
 }
 
 $(document).on('keyup', function(e) {
