@@ -678,16 +678,25 @@ function processTimings(raw_time, period_val){
     //PM
     period = "PM";
   }
+  if(parseInt(time_split[0]) > 12) {
+    console.log("malformed time entered from front end");
+    throw("malformed time entered from front end");
+  }
   if(time_split.length == 1){
     //just hours
     time_string = time_split[0] + ":00 " + period;
   }
   else if(time_split.length == 2){
     //hours and mins
+    if(parseInt(time_split[1]) > 59) {
+      console.error("malformed time entered from front end");
+      throw("malformed time entered from front end");
+    }
     time_string = time_split[0] + ":"+time_split[1]+" " + period;
   }
   else {
     console.error("malformed time entered from front end");
+    throw("malformed time entered from front end");
   }
   console.log("TIME STRING:" + time_string);
   return time_string;
@@ -819,7 +828,8 @@ function appendContent(){
       }
     }
     catch(err) {
-      alert("Enter your task's Description, Start time and End time!")
+      alert("Your input has errors! Enter your task's Description, Start time and End time.")
+      clearAddTask();
     }
 }
 
