@@ -810,13 +810,17 @@ function showRoutineHeading(){
 }
 function appendContent(){
     //to do: replace this with insert task and do a variant of insertion sort
-    var new_task = getNewTask();
-    if(new_task.desc.length != 0){
-        board.data.push(new_task);
-        updateUI();
-        clearAddTask();
+    try{
+      var new_task = getNewTask();
+      if(new_task.desc.length != 0){
+          board.data.push(new_task);
+          updateUI();
+          clearAddTask();
+      }
     }
-    
+    catch(err) {
+      alert("Enter your task's Description, Start time and End time!")
+    }
     
 }
 
